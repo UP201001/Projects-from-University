@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Animator animator;
-    public int maxHP = 100;
-    int currentHP;
-    void Start()
-    {
-        currentHP = maxHP;
-    }
+    private Animator animator;
+    public Rigidbody2D rigidbody2D;
+    public Transform player;
+    private bool lookingRight = true;
+    private float maxHP;
+    private HealthBar healthBar;
 
+    private void Start() {
+        animator = GetComponent<Animator>();
+        rigidbody2D = GetComponent<Rigidbody2D>();
+        healthBar.
+    }
+    
     public void TakeDamage(int damage){
         currentHP -= damage;
 
@@ -21,13 +26,5 @@ public class Enemy : MonoBehaviour
         {
             Die();
         }
-    }
-
-    public void Die(){
-        Debug.Log("Enemy died");
-        animator.SetBool("isDie", true);
-
-        GetComponent<Collider2D>().enabled = false;
-        this.enabled = false;
     }
 }
