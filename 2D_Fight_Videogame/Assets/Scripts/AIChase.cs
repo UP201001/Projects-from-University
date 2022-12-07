@@ -5,7 +5,8 @@ using UnityEngine;
 public class AIChase : MonoBehaviour
 {
     public GameObject player;
-    public float speed;
+    //public Animator animator;
+    public float speed = 5f;
     private float distance;
     public float distanceBetween = 4f;
     private bool m_FacingRight = true; 
@@ -25,6 +26,7 @@ public class AIChase : MonoBehaviour
         if (distance < distanceBetween)
         {
             transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
+            //animator.SetFloat("Speed", Mathf.Abs(horizontal));
 
             if(horizontal > 0.0f && !m_FacingRight) Flip();
             else if (horizontal < 0.0f && m_FacingRight) Flip();
