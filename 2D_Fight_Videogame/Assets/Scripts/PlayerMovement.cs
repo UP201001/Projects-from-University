@@ -9,10 +9,11 @@ public class PlayerMovement : MonoBehaviour
     public float runSpeed = 40f;
     float horizontalMove = 0f;
     bool jump = false;
+
+    private bool m_FacingRight = true; 
     void Update()
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
-
         animator.SetFloat("Speed", Mathf.Abs(horizontalMove));
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -30,5 +31,13 @@ public class PlayerMovement : MonoBehaviour
     {
         controller.Move(horizontalMove * Time.fixedDeltaTime, false, jump);
         jump = false;
+    }
+
+    private void Flip()
+    {
+        m_FacingRight = !m_FacingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
 }
