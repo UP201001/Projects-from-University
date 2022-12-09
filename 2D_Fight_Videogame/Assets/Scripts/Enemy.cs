@@ -8,9 +8,9 @@ public class Enemy : MonoBehaviour
     public LayerMask enemyLayers;
     public Transform attackPoint;
     
-    [Range(0, 5f)] public float attackRate = 2f;
     [Range(0, 5f)] public float attackRange;
     [Range(0, 5f)] public float nextAttackTime = 0f;
+    [Range(0, 5f)] public float attackRate = 2f;
     [Range(5, 30)] public int attackDamage;
     
     public bool isFlipped = false;

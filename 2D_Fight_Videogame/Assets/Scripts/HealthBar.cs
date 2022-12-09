@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour
 {
+    public Slider slider;
     private HealthSystem healthSystem;
-    public void Setup(HealthSystem healthSystem)
+
+    public void SetMaxHealth(double maxHealth)
     {
-        this.healthSystem = healthSystem;
+        slider.maxValue= (float)maxHealth; 
+        slider.value= (float)maxHealth;
     }
 
-    private void Update() {
-        transform.Find("Bar").localScale = new Vector3(healthSystem.GetHealthPercent(), 1);
+    public void SetHealth(double health)
+    {
+        slider.value = (float)health;
     }
 }

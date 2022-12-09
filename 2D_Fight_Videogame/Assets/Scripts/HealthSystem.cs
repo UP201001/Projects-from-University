@@ -1,21 +1,21 @@
 public class HealthSystem
 {
-    private int health;
-    private int maxHealth;
+    private double health;
+    private double maxHealth;
     private float healthPercent;
-    public HealthSystem(int maxHp)
+    public HealthSystem(double maxHp)
     {
         this.maxHealth = maxHp;
         health = maxHealth;
     }
 
-    public int GetHealth()
+    public double GetHealth()
     {
         return health;
     }
 
-    public float GetHealthPercent(){
-        healthPercent = health / maxHealth; 
+    public double GetHealthPercent(){
+        healthPercent = (float)(health / maxHealth); 
         return healthPercent;
     }
 
