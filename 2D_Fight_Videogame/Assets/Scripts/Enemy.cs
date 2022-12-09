@@ -4,55 +4,77 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Transform player;
-
-	public bool isFlipped = false;
-
-	
     public Animator animator;
-    public int maxHP = 100;
-    int currentHP;
+    public LayerMask enemyLayers;
+    public Transform attackPoint;
+    
+    [Range(0, 5f)] public float attackRate = 2f;
+    [Range(0, 5f)] public float attackRange;
+    [Range(0, 5f)] public float nextAttackTime = 0f;
+    [Range(5, 30)] public int attackDamage;
+    
+    public bool isFlipped = false;
+    
+    private HealthSystem healthSystem;
+    public int HP;
+
     void Start()
     {
-        currentHP = maxHP;
+        healthSystem = new HealthSystem(HP);
+        Debug.Log("Enemy Health: " + healthSystem.GetHealth());
     }
 
-    public void TakeDamage(int damage){
-        currentHP -= damage;
+    void Update()
+    {
+        if (Time.time >= nextAttackTime)
+        {
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                Attack();
+                nextAttackTime = Time.time + 1f / attackRate;
+            }
+        }
+    }
 
-        Debug.Log(currentHP);
+    public void TakeDamage(int damage)
+    {
+        healthSystem.Damage(damage);
 
-        animator.SetTrigger("Hurt");
-        
-        if (currentHP <= 0)
+        Debug.Log(healthSystem.GetHealth());
+
+        animator.SetTrigger("Dano");
+
+        if (healthSystem.GetHealth() <= 0)
         {
             Die();
         }
     }
 
-    public void Die(){
+    public void Die()
+    {
         Debug.Log("Enemy died");
-        animator.SetBool("isDie", true);
+        animator.SetBool("estaMuerto", true);
 
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
     }
-    public void LookAtPlayer()
-	{
-		Vector3 flipped = transform.localScale;
-		flipped.z *= -1f;
 
-		if (transform.position.x > player.position.x && isFlipped)
-		{
-			transform.localScale = flipped;
-			transform.Rotate(0f, 180f, 0f);
-			isFlipped = false;
-		}
-		else if (transform.position.x < player.position.x && !isFlipped)
-		{
-			transform.localScale = flipped;
-			transform.Rotate(0f, 180f, 0f);
-			isFlipped = true;
-		}
-	}
+    void Attack()
+    {
+        animator.SetTrigger("Ataque");
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            Debug.Log("We hit " + enemy.name);
+            enemy.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null) return;
+
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
 }

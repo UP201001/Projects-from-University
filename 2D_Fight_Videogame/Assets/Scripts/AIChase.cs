@@ -25,9 +25,8 @@ public class AIChase : MonoBehaviour
 
         if (distance < distanceBetween)
         {
-            transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
             //animator.SetFloat("Speed", Mathf.Abs(horizontal));
-
+            transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
             if(horizontal > 0.0f && !m_FacingRight) Flip();
             else if (horizontal < 0.0f && m_FacingRight) Flip();
 
@@ -39,9 +38,12 @@ public class AIChase : MonoBehaviour
             }
             else currentAngle = 0f;
 
+            //transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
             //Debug.Log(currentAngle);
 
             transform.rotation = Quaternion.Euler(Vector3.forward * (currentAngle));
+
+            
         }
     }
     private void Flip()

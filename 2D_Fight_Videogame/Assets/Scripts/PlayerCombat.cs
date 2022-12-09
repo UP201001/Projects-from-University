@@ -5,12 +5,23 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     public Animator animator;
-    public Transform attackPoint;
-    [Range(0, 1f)] public float attackRange;
     public LayerMask enemyLayers;
-    public int attackDamage = 40;
-    public float attackRate = 2f;
-    float nextAttackTime = 0f;
+    public Transform attackPoint;
+    
+    [Range(0, 5f)] public float attackRate = 2f;
+    [Range(0, 5f)] public float attackRange;
+    [Range(0, 5f)] public float nextAttackTime = 0f;
+    [Range(0, 30)] public int attackDamage;
+
+    private HealthSystem healthSystem;
+    public int HP;
+
+    void Start()
+    {
+        healthSystem = new HealthSystem(HP);
+        Debug.Log("Player Health: " + healthSystem.GetHealth());
+
+    }
     void Update()
     {
         if (Time.time >= nextAttackTime)
@@ -21,6 +32,29 @@ public class PlayerCombat : MonoBehaviour
                 nextAttackTime = Time.time + 1f / attackRate;
             }
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        healthSystem.Damage(damage);
+
+        Debug.Log(healthSystem.GetHealth());
+
+        animator.SetTrigger("Hurt");
+
+        if (healthSystem.GetHealth() <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        Debug.Log("Enemy died");
+        animator.SetBool("isDie", true);
+
+        GetComponent<Collider2D>().enabled = false;
+        this.enabled = false;
     }
 
     void Attack()
